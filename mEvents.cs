@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 [AddComponentMenu("mEvents/mEvents")]
 public class mEvents : MonoBehaviour
 {
@@ -13,12 +17,26 @@ public class mEvents : MonoBehaviour
     [Serializable] public struct Combination
     {
         public mKeyPress Keypress;
-        public KeyCode key;
-        public Combination(KeyCode key)
+#if ENABLE_LEGACY_INPUT_MANAGER
+        public KeyCode keycode;
+#endif
+#if ENABLE_INPUT_SYSTEM
+        public Key key;
+#endif
+#if ENABLE_LEGACY_INPUT_MANAGER
+        public Combination(KeyCode keycode)
+        {
+            Keypress = mKeyPress.Down;
+            this.keycode = keycode;
+        }
+#endif
+#if ENABLE_INPUT_SYSTEM
+        public Combination(Key key)
         {
             Keypress = mKeyPress.Down;
             this.key = key;
         }
+#endif
     }
     [Serializable] public class mInputType
     {
@@ -196,7 +214,13 @@ public class mEvents : MonoBehaviour
             switch (inputEvents[i].Combination[x].Keypress)
             {
                 case mKeyPress.Down:
-                    keys[x] = Input.GetKeyDown(inputEvents[i].Combination[x].key);
+#if ENABLE_LEGACY_INPUT_MANAGER
+                    keys[x] = Input.GetKeyDown(inputEvents[i].Combination[x].keycode);
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+                    keys[x] = Keyboard.current[inputEvents[i].Combination[x].key].wasPressedThisFrame;
+#endif
 
                     if (keys[x] == false)
                         return false;
@@ -204,7 +228,13 @@ public class mEvents : MonoBehaviour
                     continue;
 
                 case mKeyPress.Up:
-                    keys[x] = Input.GetKeyUp(inputEvents[i].Combination[x].key);
+#if ENABLE_LEGACY_INPUT_MANAGER
+                    keys[x] = Input.GetKeyUp(inputEvents[i].Combination[x].keycode);
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+                    keys[x] = Keyboard.current[inputEvents[i].Combination[x].key].wasReleasedThisFrame;
+#endif
 
                     if (keys[x] == false)
                         return false;
@@ -212,7 +242,13 @@ public class mEvents : MonoBehaviour
                     continue;
 
                 case mKeyPress.Hold:
-                    keys[x] = Input.GetKey(inputEvents[i].Combination[x].key);
+#if ENABLE_LEGACY_INPUT_MANAGER
+                    keys[x] = Input.GetKey(inputEvents[i].Combination[x].keycode);
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+                    keys[x] = Keyboard.current[inputEvents[i].Combination[x].key].isPressed;
+#endif
 
                     if (keys[x] == false)
                         return false;
