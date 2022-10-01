@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -427,7 +427,15 @@ public class mEventsEditor : Editor
                     EditorGUIUtility.labelWidth = 60;
                     EditorGUILayout.PropertyField(array.GetArrayElementAtIndex(x).FindPropertyRelative("Keypress"), GUILayout.Width(120));
                     EditorGUIUtility.labelWidth = 30;
+
+#if ENABLE_LEGACY_INPUT_MANAGER
                     EditorGUILayout.PropertyField(array.GetArrayElementAtIndex(x).FindPropertyRelative("key"));
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+                    EditorGUILayout.PropertyField(array.GetArrayElementAtIndex(x).FindPropertyRelative("key"));
+#endif
+
                     EditorGUIUtility.labelWidth = 70;
 
                     if (GUILayout.Button("↑", GUILayout.Width(20)))
