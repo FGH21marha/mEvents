@@ -173,6 +173,8 @@ public class mEventsEditor : Editor
 
             if (currentEvent.Visible)
             {
+                EditorGUILayout.Space(2);
+
                 using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
                 {
                     using (new EditorGUILayout.HorizontalScope(GUILayout.Height(24)))
@@ -308,6 +310,8 @@ public class mEventsEditor : Editor
 
     private void KeyboardEvent(SerializedProperty list, int i)
     {
+        EditorGUILayout.Space(2);
+
         using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
         {
             using (new EditorGUILayout.HorizontalScope(GUILayout.Height(24)))
@@ -584,13 +588,14 @@ public class mEventsEditor : Editor
     {
         EditorGUILayout.Space(5);
 
-        GUIStyle i = EditorStyles.boldLabel;
+        GUIStyle i = new GUIStyle();
         i.fontSize = 14;
         i.alignment = TextAnchor.MiddleCenter;
+        i.normal.textColor = new Color(0.8f, 0.8f, 0.8f, 1);
+        i.fontStyle = FontStyle.Bold;
         EditorGUI.LabelField(GUILayoutUtility.GetRect(200, 24), title, i);
         EditorGUI.DrawRect(GUILayoutUtility.GetRect(1, 1), new Color(0, 0, 0, 0.5f));
         EditorGUILayout.Space();
-        i = GUIStyle.none;
     }
 
     private SerializedProperty GetRelativeProperty(SerializedProperty list, int i, string ID)
